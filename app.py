@@ -1,5 +1,5 @@
 # streamlit run C:\Users\Ravin\PycharmProjects\MachineLearningProject\app.py
-import app as st
+import streamlit as st
 import pandas as pd
 
 st.set_page_config(page_title="CAPSTONE PROJECT", layout="wide")
@@ -144,3 +144,4 @@ elif page == "Unsupervised":
     ''')
 
     st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-02 162814.png")
+
