@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 st.set_page_config(page_title="CAPSTONE PROJECT", layout="wide")
-data = pd.read_csv(r"C:\Users\Ravin\Downloads\updated1_survey.csv")
+data = pd.read_csv("https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/updated1_survey.csv")
 page = st.sidebar.selectbox("Select a Page", ("Home", "Exploratory Data Analysis", "Classification", "Regression", "Unsupervised"))
 
 if page == "Home":
@@ -37,19 +37,7 @@ if page == "Home":
 elif page == "Exploratory Data Analysis":
     st.title("Exploratory Data Analysis")
     st.divider()
-    st.subheader("In Above Pie Chart We Clearly See That Most Of Working Professionals are Male Which are Around 78.5% in Tech Companies 19.4% Are Female And Rest are Others")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213705.png")
-    st.subheader("These are top 5 Countries Having Most number of working employees")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213729.png")
-    st.subheader("There are More All Columns Analysis Below of Dataset")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213754.png")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213800.png")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213808.png")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213816.png")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213824.png")
-    st.subheader("Heatmap Distribution Of All Categories")
-    st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-01 213846.png")
-
+    
 elif page == "Classification":
     st.title("Classification")              #[[205  94]
                                             #[ 15 316]]')
@@ -144,3 +132,4 @@ elif page == "Unsupervised":
     ''')
 
     st.image(r"C:\Users\Ravin\OneDrive\Pictures\Screenshots\Screenshot 2025-08-02 162814.png")
+
