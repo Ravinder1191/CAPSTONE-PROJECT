@@ -1,9 +1,13 @@
-# streamlit run C:\Users\Ravin\PycharmProjects\MachineLearningProject\app.py
 import streamlit as st
 import pandas as pd
+import pickle
+import plotly.express as px
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler,OrdinalEncoder
+from sklearn.cluster import AgglomerativeClustering
 
 st.set_page_config(page_title="CAPSTONE PROJECT", layout="wide")
-data = pd.read_csv("https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/updated1_survey.csv")
+data = pd.read_csv('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/updated1_survey.csv')
 page = st.sidebar.selectbox("Select a Page", ("Home", "Exploratory Data Analysis", "Classification", "Regression", "Unsupervised"))
 
 if page == "Home":
@@ -36,32 +40,34 @@ if page == "Home":
 
 elif page == "Exploratory Data Analysis":
     st.title("Exploratory Data Analysis")
-    st.divider()
-
+    column_selection=st.selectbox("Select EDA which you want to see",['Age','Gender','Country','State','Self Employed',
+                                                      'Family History','Treatment History','Work Interfere',
+                                                      'Number of Employees','Heatmap(Correlation Matrix)'])
+    if column_selection == 'Age':
+        st.title("Age Distribution of Persons.")
+        st.write('This bar helps us to understand which age groups have more respondents.')
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-07%20202225.png')
+        st.markdown('''Here we clearly see most of age groups are''')
 elif page == "Classification":
-    st.title("Classification")              #[[205  94]
-                                            #[ 15 316]]')
-    st.markdown('''
-### Model used for classification
-- Gradient Boosting Classifier - A Gradient Boosting Classifier Is a Machine Learning Algorithm Used For Classification Tasks, Belonging To The Family Of Ensemble methods. It Sequentially Combines Multiple Typically Decision Trees, To create a Strong Predictive Model.
-- Features Used- work interfere and family history 
-### How features are selected?
-- Using heatmap first choose the target row or column and see it's corresponding row and columns values less 0.30 ignore values greater than 0.30 are best. 
-### Scores
-# Decision Tree Classifier
-- A decision Tree classifier Is a Supervised Machine Learning Algorithm Used For Classification tasks. It Employees a Tree-Like structure To Model Decisions and Their Possible Consequences, Ultimately Classifying Data Instances Into Discrete Categories. 
-''')
-    st.title('Model Performance')
+    st.title("Classification")
     st.divider()
+    st.write("Predicting Whether a Person is Likely To Seek Mental Health Treatment or Not.")
     st.markdown('''
-## Accuracy: 
-    0.8269841269841269  
-## roc auc: 
-    0.8201507542765917  
-## f1 score: 
-    0.8529014844804319
-
-    ''')
+## Models Used?
+- Gradient Boosting Classifier  
+- Decision Tree Classifier
+## What is Gradient Boosting Classifier?
+- It Combines Many Weak (Decision Trees).
+## Working?
+- It Build Model in stages.Each New Tree tries ot correct errors of last
+- Final Prediction Based on Combination of all trees,
+## accuracy
+    0.8269841269841269
+## roc auc
+    0.8201507542765917
+## f1 score
+    0.8529014844804319  
+''')
     classification_data = {
         "Class": [0, 1, "accuracy", "macro avg", "weighted avg"],
         "Precision": [0.93, 0.77, "", 0.85, 0.85],
@@ -73,16 +79,20 @@ elif page == "Classification":
     classification_report = pd.DataFrame(classification_data)
     st.table(classification_report)
 
-    st.title('Model Performance of Decision Tree Classifier')
     st.markdown('''
-## accuracy:
+## What is Decision Tree Classifier?
+- It makes Decisions by Splitting The Data Based on Feature Values Using Tree like Structure.
+## Working?
+- Starts from top which is called root node.
+- Based on result splits data.
+- Continues Splitting Until reaches Final Decision.
+## accuracy
     0.8142857142857143
-## roc auc:
+## roc auc
     0.8111378310380017
-## f1 score:
-    0.8316546762589928    
-    ''')
-
+## f1 score
+    0.8316546762589928
+''')
     classification_data = {
         "Class": [0, 1, "accuracy", "macro avg", "weighted avg"],
         "Precision": [0.84, 0.79, "", 0.82, 0.82],
@@ -92,42 +102,76 @@ elif page == "Classification":
     }
     classification_report = pd.DataFrame(classification_data)
     st.table(classification_report)
+    st.subheader("Decision Tree of Model")
+    st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205829.png')
 
 elif page == "Regression":
     st.title("Regression")
     st.divider()
+    st.subheader("Predicting Age of Persons")
     st.markdown('''
-### Model used to predict age
-- Elastic Net Regression Model
-### What is Elastic Net Regression?
-- Elastic Net Regression is a Regularized Linear Regression Model That Combines The Penalties of Both Lasso (L1) and Ridge (L2) Regularization.It is Designed to Address Limitation of Lasso and Ridge
-    ''')
-    st.title('Model Scores')
-    st.divider()
+## Which Model is Used?
+- Elastic Net Regression.
+## Working?
+- It Combines Both Lasso and Ridge Regression regularization which are also called L1 and L2 Regularization.
+- Lasso:Helps with Feature Selection.
+- Ridge:Helps to Reduce Overfitting.
+''')
+    st.title("Model Scores")
     st.markdown('''
-## R2 Score:0.0449
-## MSE:
-    50.43
-## MAE:
-    5.51
-- Here below is Graphical Representation.
-    ''')
+## R2 Score: 
+    0.0449  
+## MSE: 
+    50.43  
+## MAE: 
+    5.51  
 
+- Below is the graphical representation of predictions vs actual values.
+''')
+    st.image("https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205817.png")
 elif page == "Unsupervised":
     st.title('Unsupervised Learning')
     st.divider()
-    st.subheader('Model used to group tech workers')
+    st.subheader('Group Tech Workers in Mental Health Personas')
     st.markdown('''
-## Agglomerative Clustering Is Used To Group Tech Workers Into Different Mental Health Personas
--  It Is type of Hirerchal Clustering In This We Assume All Datapoints In Indiviual Cluster and Then start Grouping Them With Nearest Datapoint and Linkage is Established is Dendrogram
-- In Below Image How Dendrogram Looks Like Shown Below  
-    ''')
-
-    st.subheader('Unsupervised Learning Score ')
+## Which Model is Used?
+- Agglomerative Clustering.
+## Working?
+- Starts with each Data Point as its own Cluster.
+- In each step, It merges the two Closest Clusters.
+- Continues merging until the required number of clusters is formed.
+- Distance Between Clusters is Calculated using Linkage methods like average or Euclidean distance Formula.
+## Note:Whole Linkage Formed is called Dendrogram
+''')
+    st.subheader('Dendrogram of Model')
+    st.divider()
+    st.image("https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205746.png")
+    st.subheader('Unsupervised Learning Score')
     st.markdown('''
 ## Agglomerative Clustering Silhouette Score: 
     0.1533
-- Here Below Is Graphical Representation.
-    ''')
+- Below is the Graphical Representation using 3D PCA.
+''')
+    features = ['family_history', 'treatment', 'work_interfere', 'remote_work', 'coworkers',
+                'supervisor', 'no_employees', 'leave']
+    encoder = OrdinalEncoder()
+    data[features] = encoder.fit_transform(data[features])
 
+    data[features] = data[features].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data[features])
 
+    agg = AgglomerativeClustering(n_clusters=3)
+    agg_labels = agg.fit_predict(scaled_data)
+
+    pca_3d = PCA(n_components=3)
+    reduced_3d = pca_3d.fit_transform(scaled_data)
+    df = pd.DataFrame(reduced_3d, columns=["PCA1", "PCA2", "PCA3"])
+    df["Cluster"] = agg_labels
+    plot_3d = px.scatter_3d(df, x="PCA1", y="PCA2", z="PCA3",
+                            color=df["Cluster"].astype(str),
+                            title="3D PCA Visualization (Agglomerative Clustering)")
+    st.subheader('2D Visualization of PCA')
+    st.image("https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205805.png")
+    st.subheader('3D Visualization of PCA')
+    st.plotly_chart(plot_3d)
