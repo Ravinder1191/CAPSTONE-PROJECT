@@ -8,28 +8,28 @@ from sklearn.cluster import AgglomerativeClustering
 
 st.set_page_config(page_title="CAPSTONE PROJECT", layout="wide")
 data = pd.read_csv('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/updated1_survey.csv')
-page = st.sidebar.selectbox("Select a Page", ("Home", "Exploratory Data Analysis", "Classification", "Regression", "Unsupervised"))
+page = st.sidebar.radio("Select a Page", ("Home", "Exploratory Data Analysis", "Classification", "Regression", "Unsupervised"))
 
 if page == "Home":
     st.title("CAPSTONE PROJECT")
     st.header("About This Project")
     st.divider()
-    st.subheader("Welcome! everyone I Built this website to show my Machine Learning Project. As we know in today's era mental health is big issue among the working professionals.")
-
+    st.subheader("Welcome! everyone I built this website to show my machine learning project. As we know in today's era mental health is big issue among the working professionals.")
     st.markdown('''
-### What Does This Project Showcase?
+### What does this project showcase?
 
-- Exploratory Data Analysis- Showing The Numbers In The Form Of Interactive Charts and Graphs.
+- Exploratory Data Analysis- Showing the numbers in the form of interactive charts and graphs.
 
-- Classification- Predicting Whether a Person is Likely To Seek Mental Health Treatment or Not.
+- Classification- Predicting whether a person is likely to seek mental health treatment or not.
 
-- Regression- Predicting The Age Of a Respondent Based on Various Features.
+- Regression- Predicting the age of a respondent based on various features.
 
-- Unsupervised Learning- Grouping Tech Workers Into Different Mental Health Personas Using Clustering.
+- Unsupervised Learning- Grouping tech workers into different mental health Personas using clustering.
 ''')
 
     st.subheader("Dataset Overview")
-    st.dataframe(data)
+    st.code(data.head)
+    st.write('To Download full data click on button below.')
     csv = data.to_csv(index=False).encode('utf-8')
     st.download_button(
         label="Download This Dataset in Csv File",
@@ -40,33 +40,108 @@ if page == "Home":
 
 elif page == "Exploratory Data Analysis":
     st.title("Exploratory Data Analysis")
-    column_selection=st.selectbox("Select EDA which you want to see",['Age','Gender','Country','State','Self Employed',
+    column_selection=st.radio("Select EDA which you want to see",['Age','Gender','Country','Self Employed',
                                                       'Family History','Treatment History','Work Interfere',
-                                                      'Number of Employees','Heatmap(Correlation Matrix)'])
+                                                      'Heatmap(Correlation Matrix)'])
     if column_selection == 'Age':
-        st.title("Age Distribution of Persons.")
+        st.title("Age Distribution of Respondents")
+        st.divider()
         st.write('This bar helps us to understand which age groups have more respondents.')
         st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-07%20202225.png')
-        st.markdown('''Here we clearly see most of age groups are''')
-elif page == "Classification":
+        st.markdown("Here we clearly see most of age groups fall between 26-33. This shows that tech force is largely young.This column in dataset is important because in today's most mental health patients from young age group.")
+    elif column_selection == 'Gender':
+        st.title("Gender Distribution ")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-11%20170747.png')
+        st.markdown('''- In this we clearly see most of workers are male which are 78.5%.
+- 19.4% tech workers are female.
+- 2.1% tech workers are transgender.
+''')
+    elif column_selection == 'Country':
+        st.title("Country Distribution")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205533.png')
+        st.markdown('''- In this we clearly see top five countries are
+- United States- 70% people are from United States.
+- United Kingdom- 17% people live in United Kingdom.
+- Canada- 7% people live in Canada.
+- Germany- 4% people live in Germany.
+- Netherlands- 2% people live in Netherlands.''')
+    elif column_selection == 'Self Employed':
+        st.title("Self Employed Distribution")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205647.png')
+        st.markdown('''
+- In this pie plot we clearly see that 87.0% people are doing job.
+- 11.6% people are self employed.
+- 1.4% people are not verified yet.
+''')
+    elif column_selection == 'Treatment History':
+        st.title("Treatment History")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205703.png')
+        st.markdown('''### In above distribution we clearly see. 
+- 50.6% people are takes treatment in past. 
+- 49.4% people does not takes treatment in past.''')
+    elif column_selection == 'Work Interfere':
+        st.title("Work Interfere")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-12%20084851.png')
+        st.markdown('''### In above let us see meaning of some words. 
+- Sometimes means work interfere sometimes affect mental health not always.
+- Not Verified means answer not clear or missing.
+- Never means work never affect mental health.
+- Rarely means very few times work affect mental health.
+- Often means work affect many times.''')
+        st.markdown('''
+- 6-25 employees high count
+- 26-100 employees high count
+- More than 1000 employees high count
+- 100-500 employees medium count
+- 1-5 employees medium count
+- 500-1000 employees lowest count
+''')
+    elif column_selection == 'Family History':
+        st.title("Family History")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205654.png')
+        st.markdown('''### Here in above pie chart we clearly see.
+- 39.1% of working professionals have mental issue in past in their family.
+- 60.9 % of professionals does not have in mental health in past in their family.''')
+    elif column_selection == 'Heatmap(Correlation Matrix)':
+        st.title("Heatmap(Correlation Matrix)")
+        st.divider()
+        st.image('https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205725.png')
+        st.markdown('''### Correlation Matrix
+- This graph show how each column relate to other columns in numbers between -1 and 1
+- 1 means strong positive relation both values go up together.
+- 0 means no relation.
+- -1 means strong negative relation one goes up other goes down.
+- Dark color means high relation.
+- Light color means low relation.
+- We use this to see which features connect more or less in data.''')
+elif page == 'Classification':
     st.title("Classification")
     st.divider()
-    st.write("Predicting Whether a Person is Likely To Seek Mental Health Treatment or Not.")
+    st.subheader("Predicting Whether a Person is Likely To Seek Mental Health Treatment or Not.")
     st.markdown('''
 ## Models Used?
 - Gradient Boosting Classifier  
 - Decision Tree Classifier
 ## What is Gradient Boosting Classifier?
-- It Combines Many Weak (Decision Trees).
+- It combines many weak learners(decision trees).
 ## Working?
-- It Build Model in stages.Each New Tree tries ot correct errors of last
-- Final Prediction Based on Combination of all trees,
+- It build model in stages.Each new tree tries ot correct errors of last
+- final prediction based on combination of all trees,
 ## accuracy
     0.8269841269841269
 ## roc auc
     0.8201507542765917
 ## f1 score
     0.8529014844804319  
+## confusion matrix
+    [[224  75]
+    [ 42 289]]
 ''')
     classification_data = {
         "Class": [0, 1, "accuracy", "macro avg", "weighted avg"],
@@ -81,17 +156,20 @@ elif page == "Classification":
 
     st.markdown('''
 ## What is Decision Tree Classifier?
-- It makes Decisions by Splitting The Data Based on Feature Values Using Tree like Structure.
+- It makes decisions by splitting the data based on feature values using tree like structure.
 ## Working?
 - Starts from top which is called root node.
 - Based on result splits data.
-- Continues Splitting Until reaches Final Decision.
+- Continues splitting until reaches final decision.
 ## accuracy
     0.8142857142857143
 ## roc auc
     0.8111378310380017
 ## f1 score
     0.8316546762589928
+## confusion matrix
+    [[224  75]
+    [ 42 289]]
 ''')
     classification_data = {
         "Class": [0, 1, "accuracy", "macro avg", "weighted avg"],
@@ -113,9 +191,9 @@ elif page == "Regression":
 ## Which Model is Used?
 - Elastic Net Regression.
 ## Working?
-- It Combines Both Lasso and Ridge Regression regularization which are also called L1 and L2 Regularization.
-- Lasso:Helps with Feature Selection.
-- Ridge:Helps to Reduce Overfitting.
+- It combines both lasso and ridge regression regularization which are also called L1 and L2 Regularization.
+- Lasso:Helps with feature selection.
+- Ridge:Helps to reduce overfitting.
 ''')
     st.title("Model Scores")
     st.markdown('''
@@ -137,11 +215,11 @@ elif page == "Unsupervised":
 ## Which Model is Used?
 - Agglomerative Clustering.
 ## Working?
-- Starts with each Data Point as its own Cluster.
-- In each step, It merges the two Closest Clusters.
+- Starts with each data point as its own cluster.
+- In each step, It merges the two closest clusters.
 - Continues merging until the required number of clusters is formed.
-- Distance Between Clusters is Calculated using Linkage methods like average or Euclidean distance Formula.
-## Note:Whole Linkage Formed is called Dendrogram
+- Distance between clusters is calculated using linkage methods like average or euclidean distance formula.
+## Note:Whole linkage formed is called dendrogram
 ''')
     st.subheader('Dendrogram of Model')
     st.divider()
@@ -175,3 +253,6 @@ elif page == "Unsupervised":
     st.image("https://raw.githubusercontent.com/Ravinder1191/CAPSTONE-PROJECT/main/MachineLearningProject/EDA_CSV/Screenshot%202025-08-03%20205805.png")
     st.subheader('3D Visualization of PCA')
     st.plotly_chart(plot_3d)
+
+
+
